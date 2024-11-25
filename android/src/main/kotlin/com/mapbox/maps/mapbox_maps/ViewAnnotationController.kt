@@ -24,12 +24,12 @@ class ViewAnnotationController(private val mapView: MapView, private val context
     if (latitude != null && longitude != null && text != null) {
       // Inflate the custom view layout
       val inflater = LayoutInflater.from(context)
-      val customView: View = inflater.inflate(R.layout.view_annotation_layout, null)
+      val customView: View = inflater.inflate(R.layout.view_annotation_layout, mapView, false)
 
-      // Set the custom text on the view
+      // Set the custom text on the viewÏ
       val textView = customView.findViewById<TextView>(R.id.annotation_text)
       textView.text = text
-
+      
       // Add the view annotation to the map
       viewAnnotationManager.addViewAnnotation(
         customView,
