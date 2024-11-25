@@ -131,6 +131,22 @@ class _MapboxMapsPlatform {
     }
   }
 
+  Future<dynamic> createViewAnnotation({
+    required double latitude,
+    required double longitude,
+    required String text,
+  }) async {
+    try {
+      return _channel.invokeMethod('view_annotation#create', <String, dynamic>{
+        'latitude': latitude,
+        'longitude': longitude,
+        'text': text,
+      });
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
   Future<void> removeAnnotationManager(String id) {
     try {
       return _channel.invokeMethod(

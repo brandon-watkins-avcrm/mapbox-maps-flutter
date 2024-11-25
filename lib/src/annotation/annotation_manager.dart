@@ -6,6 +6,18 @@ class AnnotationManager {
   AnnotationManager._({required _MapboxMapsPlatform mapboxMapsPlatform})
       : _mapboxMapsPlatform = mapboxMapsPlatform;
 
+  Future<void> createViewAnnotation({
+    required double latitude,
+    required double longitude,
+    required String text,
+  }) async {
+    return _mapboxMapsPlatform.createViewAnnotation(
+      latitude: latitude,
+      longitude: longitude,
+      text: text,
+    );
+  }
+
   /// Create a [PointAnnotationManager] to add/remove/update [PointAnnotation]s on the map.
   ///
   /// If [id] is specified, the string is used as an identifier for a layer and a source backing the create manager.
