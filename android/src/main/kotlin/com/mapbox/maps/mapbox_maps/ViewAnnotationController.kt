@@ -21,34 +21,27 @@ class ViewAnnotationController(private val mapView: MapView, private val context
     val longitude = call.argument<Double>("longitude")
     val text = call.argument<String>("text")
 
-    // Inflate the custom view layout
-    val inflater = LayoutInflater.from(context)
-    val customView: View = inflater.inflate(R.layout.view_annotation_layout, null)
+    if (latitude != null && longitude != null && text != null) {
+      // Inflate the custom view layout
+      val inflater = LayoutInflater.from(context)
+      val customView: View = inflater.inflate(R.layout.view_annotation_layout, null)
 
-    // Set the custom text on the view
-    val textView = customView.findViewById<TextView>(R.id.annotation_text)
-    textView.text = text
+      // Set the custom text on the view
+      val textView = customView.findViewById<TextView>(R.id.annotation_text)
+      textView.text = text
 
-//    viewAnnotation = viewAnnotationManager.addViewAnnotation(
-//      resId = R.layout.item_callout_view,
-//      options = viewAnnotationOptions {
-//        geometry(pointAnnotation.geometry)
-//        annotationAnchor {
-//          anchor(ViewAnnotationAnchor.BOTTOM)
-//          offsetY((pointAnnotation.iconImageBitmap?.height!!.toDouble()))
-//        }
-//      }
-//    )
+      // Add the view annotation to the map
+      viewAnnotationManager.addViewAnnotation(
+        customView,
+        ViewAnnotationOptions.Builder()
+          .geometry(Point.fromLngLat(longitude, latitude))
+          .build()
+      )
 
-    // Add the view annotation to the map
-    viewAnnotationManager.addViewAnnotation(
-      customView,
-      ViewAnnotationOptions.Builder()
-        .geometry(Point.fromLngLat(longitude, latitude))
-//        .anchor(ViewAnnotationAnchor.CENTER)
-//        .offsetX(0)
-//        .offsetY(0)
-        .build()
-    )
+      result.success(null)
+    } else {
+      result.error("INVALID_ARGUMENTS", "Latitude, longitude, or text is null", null)
+    }
+
   }
 }
