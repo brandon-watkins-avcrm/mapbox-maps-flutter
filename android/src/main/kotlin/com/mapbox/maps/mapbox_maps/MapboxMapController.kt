@@ -219,6 +219,12 @@ class MapboxMapController(
       "view_annotation#create" -> {
         viewAnnotationController.addViewAnnotation(call, result)
       }
+      "view_annotation#update" -> {
+        viewAnnotationController.updateViewAnnotation(call, result)
+      }
+      "view_annotation#remove" -> {
+        viewAnnotationController.removeViewAnnotation(call, result)
+      }
       "annotation#create_manager" -> {
         annotationController.handleCreateManager(call, result)
       }

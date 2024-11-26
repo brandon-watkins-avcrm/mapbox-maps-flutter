@@ -132,15 +132,47 @@ class _MapboxMapsPlatform {
   }
 
   Future<dynamic> createViewAnnotation({
+    required String id,
     required double latitude,
     required double longitude,
     required String text,
   }) async {
     try {
       return _channel.invokeMethod('view_annotation#create', <String, dynamic>{
+        'id': id,
         'latitude': latitude,
         'longitude': longitude,
         'text': text,
+      });
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<dynamic> updateViewAnnotation({
+    required String id,
+    required double latitude,
+    required double longitude,
+    required String text,
+  }) async {
+    try {
+      return _channel.invokeMethod('view_annotation#update', <String, dynamic>{
+        'id': id,
+        'latitude': latitude,
+        'longitude': longitude,
+        'text': text,
+      });
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<dynamic> removeViewAnnotation({
+    required String id,
+  }) async {
+    try {
+      return _channel.invokeMethod('view_annotation#remove', <String, dynamic>{
+        'id': id,
       });
     } on PlatformException catch (e) {
       return new Future.error(e);
