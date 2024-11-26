@@ -7,15 +7,37 @@ class AnnotationManager {
       : _mapboxMapsPlatform = mapboxMapsPlatform;
 
   Future<void> createViewAnnotation({
+    required String id,
     required double latitude,
     required double longitude,
     required String text,
   }) async {
     return _mapboxMapsPlatform.createViewAnnotation(
+      id: id,
       latitude: latitude,
       longitude: longitude,
       text: text,
     );
+  }
+
+  Future<void> updateViewAnnotation({
+    required String id,
+    required double latitude,
+    required double longitude,
+    required String text,
+  }) async {
+    return _mapboxMapsPlatform.updateViewAnnotation(
+      id: id,
+      latitude: latitude,
+      longitude: longitude,
+      text: text,
+    );
+  }
+
+  Future<void> removeViewAnnotation({
+    required String id,
+  }) async {
+    return _mapboxMapsPlatform.removeViewAnnotation(id: id);
   }
 
   /// Create a [PointAnnotationManager] to add/remove/update [PointAnnotation]s on the map.
