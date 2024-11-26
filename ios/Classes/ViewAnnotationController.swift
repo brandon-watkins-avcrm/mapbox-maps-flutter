@@ -12,17 +12,6 @@ class ViewAnnotationController: NSObject {
         super.init()
     }
 
-    private func createSampleView(withText text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .systemFont(ofSize: 14)
-        label.numberOfLines = 0
-        label.textColor = .black
-        label.backgroundColor = .white
-        label.textAlignment = .center
-        return label
-    }
-
     // Add view annotation to the map
     func addViewAnnotation(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = methodCall.arguments as? [String: Any],
@@ -34,6 +23,10 @@ class ViewAnnotationController: NSObject {
             result(FlutterError(code: "INVALID_ARGUMENTS", message: "Missing arguments", details: nil))
             return
         }
+
+        // Optional offsets with defaults
+        let offsetX = args["offsetX"] as? Double ?? 0.0
+        let offsetY = args["offsetY"] as? Double ?? 0.0
 
         // Create a custom UIView for the annotation
         let annotationView = UIView()
@@ -70,7 +63,7 @@ class ViewAnnotationController: NSObject {
         ])
 
         // Explicit size for Mapbox
-        annotationView.frame = CGRect(x: 0, y: 0, width: 150, height: 80)
+        annotationView.frame = CGRect(x: 0, y: 0, width: 170, height: 110)
 
         // Create the coordinate and add annotation to the map
         let centerCoordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
@@ -78,8 +71,10 @@ class ViewAnnotationController: NSObject {
 
         let viewAnnotationOptions = ViewAnnotationOptions(
             geometry: point,
-            width: 150,
-            height: 80
+            width: 170,
+            height: 110,
+            offsetX: offsetX,
+            offsetY: offsetY,
         )
 
         do {
