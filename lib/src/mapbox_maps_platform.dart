@@ -103,7 +103,7 @@ class _MapboxMapsPlatform {
       case AndroidPlatformViewHostingMode.HC:
         return PlatformViewsService.initExpensiveAndroidView;
       case AndroidPlatformViewHostingMode.VD:
-        throw "Unexpected hostring mode(VD) when selecting an android view controller";
+        throw "Unexpected hosting mode(VD) when selecting an android view controller";
     }
   }
 
@@ -117,8 +117,11 @@ class _MapboxMapsPlatform {
     _channel.setMethodCallHandler(null);
   }
 
-  Future<dynamic> createAnnotationManager(String type,
-      {String? id, String? belowLayerId}) async {
+  Future<dynamic> createAnnotationManager(
+    String type, {
+    String? id,
+    String? belowLayerId,
+  }) async {
     try {
       return _channel
           .invokeMethod('annotation#create_manager', <String, dynamic>{
@@ -132,17 +135,23 @@ class _MapboxMapsPlatform {
   }
 
   Future<dynamic> createViewAnnotation({
-    required String id,
-    required double latitude,
-    required double longitude,
-    required String text,
+    required String viewAnnotationId,
+    required String featureId,
+    required String layerId,
+    required String title,
+    required String body,
+    double? offsetX,
+    double? offsetY,
   }) async {
     try {
       return _channel.invokeMethod('view_annotation#create', <String, dynamic>{
-        'id': id,
-        'latitude': latitude,
-        'longitude': longitude,
-        'text': text,
+        'viewAnnotationId': viewAnnotationId,
+        'featureId': featureId,
+        'layerId': layerId,
+        'title': title,
+        'body': body,
+        'offsetX': offsetX,
+        'offsetY': offsetY,
       });
     } on PlatformException catch (e) {
       return new Future.error(e);
@@ -150,17 +159,19 @@ class _MapboxMapsPlatform {
   }
 
   Future<dynamic> updateViewAnnotation({
-    required String id,
-    required double latitude,
-    required double longitude,
-    required String text,
+    required String viewAnnotationId,
+    required String featureId,
+    required String layerId,
+    required String title,
+    required String body,
   }) async {
     try {
       return _channel.invokeMethod('view_annotation#update', <String, dynamic>{
-        'id': id,
-        'latitude': latitude,
-        'longitude': longitude,
-        'text': text,
+        'viewAnnotationId': viewAnnotationId,
+        'featureId': featureId,
+        'layerId': layerId,
+        'title': title,
+        'body': body,
       });
     } on PlatformException catch (e) {
       return new Future.error(e);

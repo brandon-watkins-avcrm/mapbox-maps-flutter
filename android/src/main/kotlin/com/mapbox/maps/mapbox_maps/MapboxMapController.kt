@@ -217,10 +217,10 @@ class MapboxMapController(
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
     when (call.method) {
       "view_annotation#create" -> {
-        viewAnnotationController.addViewAnnotation(call, result)
+        viewAnnotationController.addViewAnnotationOnFeature(call, result)
       }
       "view_annotation#update" -> {
-        viewAnnotationController.updateViewAnnotation(call, result)
+        viewAnnotationController.updateViewAnnotationOnFeature(call, result)
       }
       "view_annotation#remove" -> {
         viewAnnotationController.removeViewAnnotation(call, result)

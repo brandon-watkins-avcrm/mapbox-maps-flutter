@@ -6,7 +6,15 @@
     android:background="@android:color/white">
 
     <TextView
-        android:id="@+id/annotation_text"
+        android:id="@+id/annotation_title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textFontWeight="700"
+        android:gravity="center" />
+    <TextView
+        android:id="@+id/annotation_body_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
