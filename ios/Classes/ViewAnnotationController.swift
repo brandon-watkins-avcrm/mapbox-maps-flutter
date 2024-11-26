@@ -12,6 +12,17 @@ class ViewAnnotationController: NSObject {
         super.init()
     }
 
+    private func createSampleView(withText text: String) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.font = .systemFont(ofSize: 14)
+        label.numberOfLines = 0
+        label.textColor = .black
+        label.backgroundColor = .white
+        label.textAlignment = .center
+        return label
+    }
+
     // Add view annotation to the map
     func addViewAnnotation(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = methodCall.arguments as? [String: Any],
@@ -65,7 +76,8 @@ class ViewAnnotationController: NSObject {
         let viewAnnotationOptions = ViewAnnotationOptions(geometry: point)
 
         do {
-            try mapView.viewAnnotations.add(annotationView, options: viewAnnotationOptions)
+            try mapView.viewAnnotations.add(createSampleView(withText: "Hello world!"), options: viewAnnotationOptions)
+            // try mapView.viewAnnotations.add(annotationView, options: viewAnnotationOptions)
             annotationsMap[viewAnnotationId] = annotationView
             result(nil)
         } catch {
