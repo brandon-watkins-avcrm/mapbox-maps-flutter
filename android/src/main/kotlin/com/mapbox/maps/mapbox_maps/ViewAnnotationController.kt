@@ -23,8 +23,8 @@ class ViewAnnotationController(private val mapView: MapView, private val context
 
   fun addViewAnnotationOnFeature(call: MethodCall, result: MethodChannel.Result) {
     val viewAnnotationId = call.argument<String>("viewAnnotationId")
-    val latitude = call.argument<String>("latitude")
-    val longitude = call.argument<String>("longitude")
+    val latitude = call.argument<Double>("latitude")
+    val longitude = call.argument<Double>("longitude")
 
     val title = call.argument<String>("title")
     val body = call.argument<String>("body")
@@ -68,8 +68,8 @@ class ViewAnnotationController(private val mapView: MapView, private val context
 
   fun updateViewAnnotationOnFeature(call: MethodCall, result: MethodChannel.Result) {
     val viewAnnotationId = call.argument<String>("viewAnnotationId")
-    val latitude = call.argument<String>("latitude")
-    val longitude = call.argument<String>("longitude")
+    val latitude = call.argument<Double>("latitude")
+    val longitude = call.argument<Double>("longitude")
 
     val title = call.argument<String>("title")
     val body = call.argument<String>("body")
