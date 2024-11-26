@@ -29,8 +29,8 @@ class ViewAnnotationController(private val mapView: MapView, private val context
     val title = call.argument<String>("title")
     val body = call.argument<String>("body")
 
-    val offsetX = call.argument<Double?>("offsetX")
-    val offsetY = call.argument<Double?>("offsetY")
+    val offsetXx = call.argument<Double?>("offsetX") ?: 0.0
+    val offsetYy = call.argument<Double?>("offsetY") ?: 0.0
 
     if (viewAnnotationId != null && featureId != null && layerId != null && title != null && body != null) {
       // Inflate the custom view layout
@@ -51,8 +51,8 @@ class ViewAnnotationController(private val mapView: MapView, private val context
           annotatedLayerFeature(layerId) {
             featureId(featureId)
           }
-          offsetX(offsetX ?: 0.0)
-          offsetY(offsetY ?: 0.0)
+//          offsetX(offsetX)
+//          offsetY(offsetY)
         }
       )
 
