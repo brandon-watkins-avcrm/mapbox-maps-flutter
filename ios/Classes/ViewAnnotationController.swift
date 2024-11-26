@@ -56,10 +56,9 @@ class ViewAnnotationController: NSObject {
         bodyLabel.textColor = .black
         annotationView.addSubview(bodyLabel)
 
-        // Position labels in the annotation view
+        // Constraints
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         bodyLabel.translatesAutoresizingMaskIntoConstraints = false
-
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: annotationView.topAnchor, constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: annotationView.leadingAnchor, constant: 8),
@@ -70,14 +69,21 @@ class ViewAnnotationController: NSObject {
             bodyLabel.bottomAnchor.constraint(equalTo: annotationView.bottomAnchor, constant: -8)
         ])
 
+        // Explicit size for Mapbox
+        annotationView.frame = CGRect(x: 0, y: 0, width: 150, height: 80)
+
         // Create the coordinate and add annotation to the map
         let centerCoordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         let point = Point(centerCoordinate)
-        let viewAnnotationOptions = ViewAnnotationOptions(geometry: point)
+
+        let viewAnnotationOptions = ViewAnnotationOptions(
+            geometry: point,
+            width: 150,
+            height: 80
+        )
 
         do {
-            try mapView.viewAnnotations.add(createSampleView(withText: "Hello world!"), options: viewAnnotationOptions)
-            // try mapView.viewAnnotations.add(annotationView, options: viewAnnotationOptions)
+            try mapView.viewAnnotations.add(annotationView, options: viewAnnotationOptions)
             annotationsMap[viewAnnotationId] = annotationView
             result(nil)
         } catch {
