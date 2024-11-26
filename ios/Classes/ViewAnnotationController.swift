@@ -61,7 +61,8 @@ class ViewAnnotationController: NSObject {
 
         // Create the coordinate and add annotation to the map
         let centerCoordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        let viewAnnotationOptions = ViewAnnotationOptions(geometry: centerCoordinate)
+        let point = Point(centerCoordinate)
+        let viewAnnotationOptions = ViewAnnotationOptions(geometry: point)
 
         do {
             try mapView.viewAnnotations.add(annotationView, options: viewAnnotationOptions)
