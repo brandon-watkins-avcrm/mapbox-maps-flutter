@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="8dp"
     android:background="@android:color/white">
 
@@ -12,16 +11,42 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
         android:textSize="16sp"
-        android:textStyle="bold"
+        android:textFontWeight="700"
         android:gravity="center" />
-
     <TextView
         android:id="@+id/annotation_body_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
         android:textSize="14sp"
-        android:gravity="center"
-        android:layout_marginTop="4dp" />
+        android:gravity="center" />
+</FrameLayout>
 
-</LinearLayout>
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:orientation="vertical"-->
+<!--    android:padding="8dp"-->
+<!--    android:background="@android:color/white">-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/annotation_title_text"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textColor="@android:color/black"-->
+<!--        android:textSize="16sp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:gravity="center" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/annotation_body_text"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textColor="@android:color/black"-->
+<!--        android:textSize="14sp"-->
+<!--        android:gravity="center"-->
+<!--        android:layout_marginTop="4dp" />-->
+
+<!--</LinearLayout>-->
+
