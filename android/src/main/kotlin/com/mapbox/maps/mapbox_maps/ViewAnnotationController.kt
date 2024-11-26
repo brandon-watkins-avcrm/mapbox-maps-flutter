@@ -49,11 +49,11 @@ class ViewAnnotationController(private val mapView: MapView, private val context
         customView,
         viewAnnotationOptions {
           geometry(Point.fromLngLat(longitude, latitude))
-          annotationAnchor {
-            anchor(ViewAnnotationAnchor.TOP)
-            offsetX(offsetX)
-            offsetY(offsetY)
-          }
+//          annotationAnchor {
+//            anchor(ViewAnnotationAnchor.BOTTOM)
+//            offsetX(offsetX)
+//            offsetY(offsetY)
+//          }
         }
       )
 
@@ -82,9 +82,9 @@ class ViewAnnotationController(private val mapView: MapView, private val context
           customView,
           viewAnnotationOptions {
             geometry(Point.fromLngLat(longitude, latitude))
-            annotationAnchor {
-              anchor(ViewAnnotationAnchor.TOP)
-            }
+//            annotationAnchor {
+//              anchor(ViewAnnotationAnchor.BOTTOM)
+//            }
           }
         )
 
