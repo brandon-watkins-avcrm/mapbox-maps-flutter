@@ -1,4 +1,10 @@
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="triangle">
-    <solid android:color="@android:color/white" />
-    <stroke android:width="1dp" android:color="#CCCCCC" />
-</shape>
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="16dp"
+    android:height="8dp"
+    android:viewportWidth="16"
+    android:viewportHeight="8">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M0,0 L8,8 L16,0 Z" />
+</vector>
