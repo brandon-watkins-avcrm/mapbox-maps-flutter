@@ -45,15 +45,15 @@ class ViewAnnotationController(private val mapView: MapView, private val context
       bodyTextView.text = body
 
       // Add the view annotation to the map
-      viewAnnotationManager.updateViewAnnotation(
+      viewAnnotationManager.addViewAnnotation(
         customView,
         viewAnnotationOptions {
           geometry(Point.fromLngLat(longitude, latitude))
-//          annotationAnchor {
-//            anchor(ViewAnnotationAnchor.BOTTOM)
-//            offsetX(offsetX)
-//            offsetY(offsetY)
-//          }
+          annotationAnchor {
+            anchor(ViewAnnotationAnchor.BOTTOM)
+            offsetX(offsetX)
+            offsetY(offsetY)
+          }
         }
       )
 
