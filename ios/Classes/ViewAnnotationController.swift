@@ -14,11 +14,11 @@ class ViewAnnotationController: NSObject {
 
     // Add view annotation to the map
     func addViewAnnotation(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard let viewAnnotationId = call.arguments?["viewAnnotationId"] as? String,
-              let latitude = call.arguments?["latitude"] as? Double,
-              let longitude = call.arguments?["longitude"] as? Double,
-              let title = call.arguments?["title"] as? String,
-              let body = call.arguments?["body"] as? String else {
+        guard let viewAnnotationId = methodCall.arguments?["viewAnnotationId"] as? String,
+              let latitude = methodCall.arguments?["latitude"] as? Double,
+              let longitude = methodCall.arguments?["longitude"] as? Double,
+              let title = methodCall.arguments?["title"] as? String,
+              let body = methodCall.arguments?["body"] as? String else {
             result(FlutterError(code: "INVALID_ARGUMENTS", message: "Missing arguments", details: nil))
             return
         }
@@ -79,9 +79,9 @@ class ViewAnnotationController: NSObject {
 
     // Update view annotation with new content
     func updateViewAnnotation(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard let viewAnnotationId = call.arguments?["viewAnnotationId"] as? String,
-              let title = call.arguments?["title"] as? String,
-              let body = call.arguments?["body"] as? String else {
+        guard let viewAnnotationId = methodCall.arguments?["viewAnnotationId"] as? String,
+              let title = methodCall.arguments?["title"] as? String,
+              let body = methodCall.arguments?["body"] as? String else {
             result(FlutterError(code: "INVALID_ARGUMENTS", message: "Missing arguments", details: nil))
             return
         }
@@ -103,7 +103,7 @@ class ViewAnnotationController: NSObject {
 
     // Remove view annotation from the map
     func removeViewAnnotation(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard let viewAnnotationId = call.arguments?["viewAnnotationId"] as? String else {
+        guard let viewAnnotationId = methodCall.arguments?["viewAnnotationId"] as? String else {
             result(FlutterError(code: "INVALID_ARGUMENTS", message: "Missing arguments", details: nil))
             return
         }
