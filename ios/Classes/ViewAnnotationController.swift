@@ -7,13 +7,13 @@ class ViewAnnotationController: NSObject {
     private var mapView: MapView
     private var annotationsMap: [String: UIView] = [:] // Store annotations by their ID
 
-    init(withMapView: MapView) {
+    init(withMapView mapView: MapView) {
         self.mapView = mapView
         super.init()
     }
 
     // Add view annotation to the map
-    func addViewAnnotation(call: FlutterMethodCall, result: @escaping FlutterResult) {
+    func addViewAnnotation(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let viewAnnotationId = call.arguments?["viewAnnotationId"] as? String,
               let latitude = call.arguments?["latitude"] as? Double,
               let longitude = call.arguments?["longitude"] as? Double,
@@ -78,7 +78,7 @@ class ViewAnnotationController: NSObject {
     }
 
     // Update view annotation with new content
-    func updateViewAnnotation(call: FlutterMethodCall, result: @escaping FlutterResult) {
+    func updateViewAnnotation(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let viewAnnotationId = call.arguments?["viewAnnotationId"] as? String,
               let title = call.arguments?["title"] as? String,
               let body = call.arguments?["body"] as? String else {
@@ -102,7 +102,7 @@ class ViewAnnotationController: NSObject {
     }
 
     // Remove view annotation from the map
-    func removeViewAnnotation(call: FlutterMethodCall, result: @escaping FlutterResult) {
+    func removeViewAnnotation(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let viewAnnotationId = call.arguments?["viewAnnotationId"] as? String else {
             result(FlutterError(code: "INVALID_ARGUMENTS", message: "Missing arguments", details: nil))
             return

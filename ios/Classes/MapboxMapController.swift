@@ -93,11 +93,11 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
     func onMethodCall(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
         switch methodCall.method {
         case "view_annotation#create":
-            viewAnnotationController!.addViewAnnotation(call, result)
+            viewAnnotationController!.addViewAnnotation(methodCall: methodCall, result: result)
         case "view_annotation#update":
-            viewAnnotationController!.updateViewAnnotation(call, result)
+            viewAnnotationController!.updateViewAnnotation(methodCall: methodCall, result: result)
         case "view_annotation#remove":
-            viewAnnotationController!.removeViewAnnotation(call, result)
+            viewAnnotationController!.removeViewAnnotation(methodCall: methodCall, result: result)
         case "annotation#create_manager":
             annotationController!.handleCreateManager(methodCall: methodCall, result: result)
         case "annotation#remove_manager":
