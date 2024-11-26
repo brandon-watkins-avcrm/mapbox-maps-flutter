@@ -12,6 +12,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
     private let mapboxMap: MapboxMap
     private let channel: FlutterMethodChannel
     private let annotationController: AnnotationController?
+    private let viewAnnotationController: ViewAnnotationController?
     private let gesturesController: GesturesController?
     private let eventHandler: MapboxEventHandler
     private let binaryMessenger: SuffixBinaryMessenger
@@ -82,6 +83,8 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         annotationController = AnnotationController(withMapView: mapView)
         annotationController!.setup(binaryMessenger: binaryMessenger)
 
+        viewAnnotationController = ViewAnnotationController(withMapView: mapView)
+
         super.init()
 
         channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
@@ -89,6 +92,12 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
 
     func onMethodCall(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
         switch methodCall.method {
+        case "view_annotation#create":
+            viewAnnotationController!.addViewAnnotation(call, result)
+        case "view_annotation#update":
+            viewAnnotationController!.updateViewAnnotation(call, result)
+        case "view_annotation#remove":
+            viewAnnotationController!.removeViewAnnotation(call, result)
         case "annotation#create_manager":
             annotationController!.handleCreateManager(methodCall: methodCall, result: result)
         case "annotation#remove_manager":
