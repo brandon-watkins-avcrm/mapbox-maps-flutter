@@ -8,8 +8,8 @@ class AnnotationManager {
 
   Future<void> createViewAnnotation({
     required String viewAnnotationId,
-    required String featureId,
-    required String layerId,
+    required double latitude,
+    required double longitude,
     required String title,
     required String body,
     double? offsetX,
@@ -17,8 +17,8 @@ class AnnotationManager {
   }) async {
     return _mapboxMapsPlatform.createViewAnnotation(
       viewAnnotationId: viewAnnotationId,
-      featureId: featureId,
-      layerId: layerId,
+      latitude: latitude,
+      longitude: longitude,
       title: title,
       body: body,
       offsetX: offsetX,
@@ -28,15 +28,15 @@ class AnnotationManager {
 
   Future<void> updateViewAnnotation({
     required String viewAnnotationId,
-    required String featureId,
-    required String layerId,
+    required double latitude,
+    required double longitude,
     required String title,
     required String body,
   }) async {
     return _mapboxMapsPlatform.updateViewAnnotation(
       viewAnnotationId: viewAnnotationId,
-      featureId: featureId,
-      layerId: layerId,
+      latitude: latitude,
+      longitude: longitude,
       title: title,
       body: body,
     );

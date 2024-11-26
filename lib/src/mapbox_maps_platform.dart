@@ -103,7 +103,7 @@ class _MapboxMapsPlatform {
       case AndroidPlatformViewHostingMode.HC:
         return PlatformViewsService.initExpensiveAndroidView;
       case AndroidPlatformViewHostingMode.VD:
-        throw "Unexpected hosting mode(VD) when selecting an android view controller";
+        throw "Unexpected hostring mode(VD) when selecting an android view controller";
     }
   }
 
@@ -136,8 +136,8 @@ class _MapboxMapsPlatform {
 
   Future<dynamic> createViewAnnotation({
     required String viewAnnotationId,
-    required String featureId,
-    required String layerId,
+    required double latitude,
+    required double longitude,
     required String title,
     required String body,
     double? offsetX,
@@ -146,8 +146,8 @@ class _MapboxMapsPlatform {
     try {
       return _channel.invokeMethod('view_annotation#create', <String, dynamic>{
         'viewAnnotationId': viewAnnotationId,
-        'featureId': featureId,
-        'layerId': layerId,
+        'latitude': latitude,
+        'longitude': longitude,
         'title': title,
         'body': body,
         'offsetX': offsetX,
@@ -160,16 +160,16 @@ class _MapboxMapsPlatform {
 
   Future<dynamic> updateViewAnnotation({
     required String viewAnnotationId,
-    required String featureId,
-    required String layerId,
+    required double latitude,
+    required double longitude,
     required String title,
     required String body,
   }) async {
     try {
       return _channel.invokeMethod('view_annotation#update', <String, dynamic>{
         'viewAnnotationId': viewAnnotationId,
-        'featureId': featureId,
-        'layerId': layerId,
+        'latitude': latitude,
+        'longitude': longitude,
         'title': title,
         'body': body,
       });
