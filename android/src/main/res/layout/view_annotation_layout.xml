@@ -1,27 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="8dp"
-    android:background="@android:color/white">
+    android:background="@drawable/infowindow_background">
 
-    <TextView
-        android:id="@+id/annotation_title_text"
+    <!-- Content container -->
+    <LinearLayout
+        android:id="@+id/annotation_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:gravity="center" />
+        android:orientation="vertical"
+        android:padding="8dp">
 
-    <TextView
-        android:id="@+id/annotation_body_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:textSize="14sp"
-        android:gravity="center"
-        android:layout_marginTop="4dp" />
+        <!-- Title Text -->
+        <TextView
+            android:id="@+id/annotation_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center" />
 
-</LinearLayout>
+        <!-- Body Text -->
+        <TextView
+            android:id="@+id/annotation_body_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <!-- Triangle/Pointers -->
+    <View
+        android:id="@+id/annotation_pointer"
+        android:layout_width="16dp"
+        android:layout_height="8dp"
+        android:layout_below="@id/annotation_content"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/infowindow_pointer" />
+</RelativeLayout>
