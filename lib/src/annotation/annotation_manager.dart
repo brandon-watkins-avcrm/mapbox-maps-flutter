@@ -49,9 +49,11 @@ class AnnotationManager {
   }
 
   Future<void> removeViewAnnotation({
-    required String id,
+    required String viewAnnotationId,
   }) async {
-    return _mapboxMapsPlatform.removeViewAnnotation(id: id);
+    return _mapboxMapsPlatform.removeViewAnnotation(
+      viewAnnotationId: viewAnnotationId,
+    );
   }
 
   /// Create a [PointAnnotationManager] to add/remove/update [PointAnnotation]s on the map.

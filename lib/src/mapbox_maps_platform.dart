@@ -198,11 +198,11 @@ class _MapboxMapsPlatform {
   }
 
   Future<dynamic> removeViewAnnotation({
-    required String id,
+    required String viewAnnotationId,
   }) async {
     try {
       return _channel.invokeMethod('view_annotation#remove', <String, dynamic>{
-        'id': id,
+        'viewAnnotationId': viewAnnotationId,
       });
     } on PlatformException catch (e) {
       return new Future.error(e);
