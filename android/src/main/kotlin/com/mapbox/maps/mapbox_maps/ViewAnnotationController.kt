@@ -109,7 +109,7 @@ class ViewAnnotationController(private val mapView: MapView, private val context
         annotationsMap.remove(viewAnnotationId)
         result.success(null)
       } else {
-        result.error("ANNOTATION_NOT_FOUND", "No annotation found with id $id", null)
+        result.error("ANNOTATION_NOT_FOUND", "No annotation found with id $viewAnnotationId", null)
       }
     } else {
       result.error("INVALID_ARGUMENTS", "ID is null", null)
