@@ -134,6 +134,25 @@ class _MapboxMapsPlatform {
     }
   }
 
+  Future<bool> viewAnnotationExists({
+    required String viewAnnotationId,
+  }) async {
+    try {
+      final result = await _channel
+          .invokeMethod<bool>('view_annotation#exists', <String, dynamic>{
+        'viewAnnotationId': viewAnnotationId,
+      });
+
+      if (result == null) {
+        return Future.error('Error calling viewAnnotationExists');
+      }
+
+      return result;
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
   Future<dynamic> createViewAnnotation({
     required String viewAnnotationId,
     required double latitude,

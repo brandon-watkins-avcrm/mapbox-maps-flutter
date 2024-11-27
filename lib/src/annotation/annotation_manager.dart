@@ -6,6 +6,12 @@ class AnnotationManager {
   AnnotationManager._({required _MapboxMapsPlatform mapboxMapsPlatform})
       : _mapboxMapsPlatform = mapboxMapsPlatform;
 
+  Future<bool> viewAnnotationExists({required String viewAnnotationId}) async {
+    return _mapboxMapsPlatform.viewAnnotationExists(
+      viewAnnotationId: viewAnnotationId,
+    );
+  }
+
   Future<void> createViewAnnotation({
     required String viewAnnotationId,
     required double latitude,

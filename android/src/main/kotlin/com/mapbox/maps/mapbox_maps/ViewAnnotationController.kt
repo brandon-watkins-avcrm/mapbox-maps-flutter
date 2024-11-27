@@ -7,9 +7,7 @@ import android.widget.TextView
 import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
 import com.mapbox.maps.ViewAnnotationAnchor
-import com.mapbox.maps.ViewAnnotationOptions
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
-import com.mapbox.maps.viewannotation.annotatedLayerFeature
 import com.mapbox.maps.viewannotation.annotationAnchor
 import com.mapbox.maps.viewannotation.geometry
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
@@ -21,7 +19,7 @@ class ViewAnnotationController(private val mapView: MapView, private val context
   private val viewAnnotationManager: ViewAnnotationManager = mapView.viewAnnotationManager
   private val annotationsMap = mutableMapOf<String, View>() // Map to track annotations by ID
 
-  fun addViewAnnotationOnFeature(call: MethodCall, result: MethodChannel.Result) {
+  fun addViewAnnotation(call: MethodCall, result: MethodChannel.Result) {
     val viewAnnotationId = call.argument<String>("viewAnnotationId")
     val latitude = call.argument<Double>("latitude")
     val longitude = call.argument<Double>("longitude")
@@ -66,7 +64,7 @@ class ViewAnnotationController(private val mapView: MapView, private val context
     }
   }
 
-  fun updateViewAnnotationOnFeature(call: MethodCall, result: MethodChannel.Result) {
+  fun updateViewAnnotation(call: MethodCall, result: MethodChannel.Result) {
     val viewAnnotationId = call.argument<String>("viewAnnotationId")
     val latitude = call.argument<Double>("latitude")
     val longitude = call.argument<Double>("longitude")
@@ -82,9 +80,6 @@ class ViewAnnotationController(private val mapView: MapView, private val context
           customView,
           viewAnnotationOptions {
             geometry(Point.fromLngLat(longitude, latitude))
-//            annotationAnchor {
-//              anchor(ViewAnnotationAnchor.BOTTOM)
-//            }
           }
         )
 
@@ -104,17 +99,29 @@ class ViewAnnotationController(private val mapView: MapView, private val context
   }
 
   fun removeViewAnnotation(call: MethodCall, result: MethodChannel.Result) {
-    val id = call.argument<String>("id")
+    val viewAnnotationId = call.argument<String>("viewAnnotationId")
 
-    if (id != null) {
-      val customView = annotationsMap[id]
+    if (viewAnnotationId != null) {
+      val customView = annotationsMap[viewAnnotationId]
       if (customView != null) {
         viewAnnotationManager.removeViewAnnotation(customView)
-        annotationsMap.remove(id)
+        annotationsMap.remove(viewAnnotationId)
         result.success(null)
       } else {
         result.error("ANNOTATION_NOT_FOUND", "No annotation found with id $id", null)
       }
+    } else {
+      result.error("INVALID_ARGUMENTS", "ID is null", null)
+    }
+  }
+
+  fun viewAnnotationExists(call: MethodCall, result: MethodChannel.Result) {
+    val viewAnnotationId = call.argument<String>("viewAnnotationId")
+
+    if (viewAnnotationId != null) {
+      val customView = annotationsMap[viewAnnotationId]
+
+      result.success(customView != null)
     } else {
       result.error("INVALID_ARGUMENTS", "ID is null", null)
     }

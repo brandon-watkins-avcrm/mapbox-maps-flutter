@@ -92,6 +92,8 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
 
     func onMethodCall(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
         switch methodCall.method {
+        case "view_annotation#exists":
+            viewAnnotationController!.viewAnnotationExists(methodCall: methodCall, result: result)
         case "view_annotation#create":
             viewAnnotationController!.addViewAnnotation(methodCall: methodCall, result: result)
         case "view_annotation#update":
