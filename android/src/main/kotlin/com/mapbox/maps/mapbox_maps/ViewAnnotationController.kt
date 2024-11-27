@@ -52,6 +52,7 @@ class ViewAnnotationController(private val mapView: MapView, private val context
             offsetX(offsetX)
             offsetY(offsetY)
           }
+          allowOverlap(true)
         }
       )
 

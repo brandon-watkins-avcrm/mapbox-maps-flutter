@@ -81,6 +81,7 @@ class ViewAnnotationController: NSObject {
             geometry: point,
             width: dynamicWidth,
             height: dynamicHeight,
+            allowOverlap: true,
             offsetX: offsetX,
             offsetY: offsetY
         )
