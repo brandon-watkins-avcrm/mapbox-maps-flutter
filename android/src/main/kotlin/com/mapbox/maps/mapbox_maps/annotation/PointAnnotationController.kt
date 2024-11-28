@@ -45,7 +45,7 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
   ) {
     try {
       val manager = delegate.getManager(managerId) as PointAnnotationManager
-      val annotations = annotationMap.values.map { it.toFLTPointAnnotation() }.toMutableList()
+      val annotations = manager.annotations.map { it.toFLTPointAnnotation() }.toMutableList()
 
       callback(Result.success(annotations))
     } catch (e: Exception) {
