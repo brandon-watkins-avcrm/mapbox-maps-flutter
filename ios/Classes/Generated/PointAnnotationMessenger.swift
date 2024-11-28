@@ -978,6 +978,7 @@ protocol _PointAnnotationMessenger {
   func update(managerId: String, annotation: PointAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func delete(managerId: String, annotation: PointAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getAnnotations(managerId: String, completion: @escaping (Result<[PointAnnotation], Error>) -> Void)
   func setIconAllowOverlap(managerId: String, iconAllowOverlap: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconAllowOverlap(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
   func setIconAnchor(managerId: String, iconAnchor: IconAnchor, completion: @escaping (Result<Void, Error>) -> Void)
@@ -1135,6 +1136,23 @@ class _PointAnnotationMessengerSetup {
         let managerIdArg = args[0] as! String
         let annotationOptionsArg = args[1] as! [PointAnnotationOptions]
         api.createMulti(managerId: managerIdArg, annotationOptions: annotationOptionsArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      createMultiChannel.setMessageHandler(nil)
+    }
+    let getAnnotationsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getAnnotations", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getAnnotationsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getAnnotations(managerId: managerIdArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))

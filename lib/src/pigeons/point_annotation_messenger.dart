@@ -1001,6 +1001,32 @@ class _PointAnnotationMessenger {
 
   final String pigeonVar_messageChannelSuffix;
 
+  Future<List<PointAnnotation>> getAnnotations(String arg_managerId) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+      'dev.flutter.pigeon._PointAnnotationMessager.getAnnotations',
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return (replyMap['result'] as List<Object?>?)!.cast<PointAnnotation>();
+    }
+  }
+
   Future<PointAnnotation> create(
       String managerId, PointAnnotationOptions annotationOption) async {
     final String pigeonVar_channelName =

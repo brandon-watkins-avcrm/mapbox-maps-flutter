@@ -39,6 +39,20 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
   private val annotationMap = mutableMapOf<String, com.mapbox.maps.plugin.annotation.generated.PointAnnotation>()
   private val managerCreateAnnotationMap = mutableMapOf<String, MutableList<String>>()
 
+  override fun getAnnotations(
+    managerId: String,
+    callback:  (Result<List<PointAnnotation>?>) -> Unit
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as PointAnnotationManager
+      val annotations = annotationMap.values.map { it.toFLTPointAnnotation() }.toMutableList()
+
+      callback(Result.success(annotations))
+    } catch (e: Exception) {
+      callback(Result.failure(e))
+    }
+  }
+
   override fun create(
     managerId: String,
     annotationOption: PointAnnotationOptions,
