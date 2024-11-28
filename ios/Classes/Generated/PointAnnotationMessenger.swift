@@ -1162,7 +1162,7 @@ class _PointAnnotationMessengerSetup {
         }
       }
     } else {
-      createMultiChannel.setMessageHandler(nil)
+      getAnnotationsChannel.setMessageHandler(nil)
     }
     let updateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.update\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

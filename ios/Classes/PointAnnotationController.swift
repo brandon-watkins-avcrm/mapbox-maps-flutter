@@ -111,12 +111,12 @@ final class PointAnnotationController: _PointAnnotationMessenger {
                 let annotations = manager.annotations.map { annotation in
                     annotation.toFLTPointAnnotation()
                 }
-                completion(annotations, nil)
+                completion(.success(annotations))
             } else {
-                completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+                completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
             }
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 

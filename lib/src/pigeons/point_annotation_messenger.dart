@@ -1003,7 +1003,7 @@ class _PointAnnotationMessenger {
 
   Future<List<PointAnnotation>> getAnnotations(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-      'dev.flutter.pigeon._PointAnnotationMessager.getAnnotations',
+      'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getAnnotations',
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
