@@ -28,42 +28,76 @@ class ViewAnnotationController: NSObject {
         let offsetX = args["offsetX"] as? Double ?? 0.0
         let offsetY = args["offsetY"] as? Double ?? 0.0
 
-        // Create a custom UIView for the annotation (InfoWindow style)
+        // Create a container view without a background
         let annotationView = UIView()
-        annotationView.backgroundColor = .white
-        annotationView.layer.cornerRadius = 10
-        annotationView.layer.borderColor = UIColor.lightGray.cgColor
-        annotationView.layer.borderWidth = 1
         annotationView.translatesAutoresizingMaskIntoConstraints = false
 
-        // Add a title label
+        // Add a title label (bright green, bold)
         let titleLabel = UILabel()
         titleLabel.text = title
-        titleLabel.font = .boldSystemFont(ofSize: 16)
-        titleLabel.textColor = .black
+        titleLabel.font = .boldSystemFont(ofSize: 16) // Bold font for the title
+        titleLabel.textColor = UIColor.green // Bright green text
+        titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         annotationView.addSubview(titleLabel)
 
-        // Add a body label
+        // Add a body label (smaller, dark gray text)
         let bodyLabel = UILabel()
         bodyLabel.text = body
-        bodyLabel.font = .systemFont(ofSize: 14)
-        bodyLabel.textColor = .darkGray
+        bodyLabel.font = .boldSystemFont(ofSize: 14) // Regular font for the body
+        bodyLabel.textColor = UIColor.green
         bodyLabel.numberOfLines = 0
         bodyLabel.translatesAutoresizingMaskIntoConstraints = false
         annotationView.addSubview(bodyLabel)
 
-        // Add constraints for dynamic sizing
+        // Add constraints to arrange the labels
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: annotationView.topAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: annotationView.leadingAnchor, constant: 8),
-            titleLabel.trailingAnchor.constraint(equalTo: annotationView.trailingAnchor, constant: -8),
+            titleLabel.topAnchor.constraint(equalTo: annotationView.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: annotationView.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: annotationView.trailingAnchor),
 
             bodyLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
-            bodyLabel.leadingAnchor.constraint(equalTo: annotationView.leadingAnchor, constant: 8),
-            bodyLabel.trailingAnchor.constraint(equalTo: annotationView.trailingAnchor, constant: -8),
-            bodyLabel.bottomAnchor.constraint(equalTo: annotationView.bottomAnchor, constant: -8)
+            bodyLabel.leadingAnchor.constraint(equalTo: annotationView.leadingAnchor),
+            bodyLabel.trailingAnchor.constraint(equalTo: annotationView.trailingAnchor),
+            bodyLabel.bottomAnchor.constraint(equalTo: annotationView.bottomAnchor)
         ])
+
+        // // Create a custom UIView for the annotation (InfoWindow style)
+        // let annotationView = UIView()
+        // annotationView.backgroundColor = UIColor.white.withAlphaComponent(0.5) // Add opacity here
+        // annotationView.layer.cornerRadius = 10
+        // annotationView.layer.borderColor = UIColor.lightGray.cgColor
+        // annotationView.layer.borderWidth = 1
+        // annotationView.translatesAutoresizingMaskIntoConstraints = false
+
+        // // Add a title label
+        // let titleLabel = UILabel()
+        // titleLabel.text = title
+        // titleLabel.font = .boldSystemFont(ofSize: 16)
+        // titleLabel.textColor = .black
+        // titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        // annotationView.addSubview(titleLabel)
+
+        // // Add a body label
+        // let bodyLabel = UILabel()
+        // bodyLabel.text = body
+        // bodyLabel.font = .systemFont(ofSize: 14)
+        // bodyLabel.textColor = .darkGray
+        // bodyLabel.numberOfLines = 0
+        // bodyLabel.translatesAutoresizingMaskIntoConstraints = false
+        // annotationView.addSubview(bodyLabel)
+
+        // // Add constraints for dynamic sizing
+        // NSLayoutConstraint.activate([
+        //     titleLabel.topAnchor.constraint(equalTo: annotationView.topAnchor, constant: 8),
+        //     titleLabel.leadingAnchor.constraint(equalTo: annotationView.leadingAnchor, constant: 8),
+        //     titleLabel.trailingAnchor.constraint(equalTo: annotationView.trailingAnchor, constant: -8),
+
+        //     bodyLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+        //     bodyLabel.leadingAnchor.constraint(equalTo: annotationView.leadingAnchor, constant: 8),
+        //     bodyLabel.trailingAnchor.constraint(equalTo: annotationView.trailingAnchor, constant: -8),
+        //     bodyLabel.bottomAnchor.constraint(equalTo: annotationView.bottomAnchor, constant: -8)
+        // ])
 
         // Trigger Auto Layout calculations
         annotationView.layoutIfNeeded()
