@@ -145,7 +145,7 @@ class ViewAnnotationController: NSObject {
             if let titleLabel = annotationView.subviews.first(where: { $0 is UILabel && ($0 as! UILabel).font == .boldSystemFont(ofSize: 16) }) as? UILabel {
                 titleLabel.text = title
             }
-            if let bodyLabel = annotationView.subviews.first(where: { $0 is UILabel && ($0 as! UILabel).font == .systemFont(ofSize: 14) }) as? UILabel {
+            if let bodyLabel = annotationView.subviews.first(where: { $0 is UILabel && ($0 as! UILabel).font == .boldSystemFont(ofSize: 14) }) as? UILabel {
                 bodyLabel.text = body
             }
             result(nil)
