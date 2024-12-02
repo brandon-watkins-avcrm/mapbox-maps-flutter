@@ -85,6 +85,13 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
 
         viewAnnotationController = ViewAnnotationController(withMapView: mapView)
 
+        let viewportController = ViewportController(
+            viewportManager: mapView.viewport,
+            cameraManager: mapView.camera,
+            mapboxMap: mapboxMap
+        )
+        _ViewportMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: viewportController, messageChannelSuffix: binaryMessenger.suffix)
+
         super.init()
 
         channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
@@ -120,6 +127,17 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             } catch {
                 result(FlutterError(code: "2342345", message: error.localizedDescription, details: nil))
             }
+        case "mapView#submitViewSizeHint":
+            if let arguments = methodCall.arguments as? [String: Double],
+               let width = arguments["width"], let height = arguments["height"] {
+                let size = CGSize(width: width, height: height)
+                guard size != .zero else { return }
+
+                // This is a bit of a hack to size the map view as early as possible,
+                // Flutter is quite slow with it
+                mapView.superview?.frame = CGRect(origin: .zero, size: size)
+            }
+            result(nil)
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -127,6 +145,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
 
     private func releaseMethodChannels() {
         channel.setMethodCallHandler(nil)
+
         StyleManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         _CameraManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         _MapInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
@@ -139,5 +158,6 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         CompassSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         annotationController?.tearDown(messenger: binaryMessenger)
+        _ViewportMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
     }
 }
