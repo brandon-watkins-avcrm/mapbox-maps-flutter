@@ -133,22 +133,35 @@ class ViewAnnotationController: NSObject {
     // Update view annotation with new content
     func updateViewAnnotation(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = methodCall.arguments as? [String: Any],
-              let viewAnnotationId = args["viewAnnotationId"] as? String,
-              let title = args["title"] as? String,
-              let body = args["body"] as? String else {
+            let viewAnnotationId = args["viewAnnotationId"] as? String,
+            let title = args["title"] as? String,
+            let body = args["body"] as? String,
+            let latitude = args["latitude"] as? Double,
+            let longitude = args["longitude"] as? Double
+        else {
             result(FlutterError(code: "INVALID_ARGUMENTS", message: "Missing arguments", details: nil))
             return
         }
 
         if let annotationView = annotationsMap[viewAnnotationId] {
-            // Find the title and body labels and update their content
-            if let titleLabel = annotationView.subviews.first(where: { $0 is UILabel && ($0 as! UILabel).font == .boldSystemFont(ofSize: 16) }) as? UILabel {
-                titleLabel.text = title
+            do {
+                // Update title and body
+                if let titleLabel = annotationView.subviews.first(where: { $0 is UILabel && ($0 as! UILabel).font == .boldSystemFont(ofSize: 16) }) as? UILabel {
+                    titleLabel.text = title
+                }
+                if let bodyLabel = annotationView.subviews.first(where: { $0 is UILabel && ($0 as! UILabel).font == .boldSystemFont(ofSize: 14) }) as? UILabel {
+                    bodyLabel.text = body
+                }
+
+                let centerCoordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                let point = Point(centerCoordinate)
+
+                annotationView.annotatedFeature.geometry = .point(point)
+
+                result(nil)
+            } catch {
+                result(FlutterError(code: "ANNOTATION_ERROR", message: "Failed to add annotation", details: error.localizedDescription))
             }
-            if let bodyLabel = annotationView.subviews.first(where: { $0 is UILabel && ($0 as! UILabel).font == .boldSystemFont(ofSize: 14) }) as? UILabel {
-                bodyLabel.text = body
-            }
-            result(nil)
         } else {
             result(FlutterError(code: "ANNOTATION_NOT_FOUND", message: "Annotation not found", details: nil))
         }
