@@ -27,6 +27,9 @@ class ViewAnnotationController(private val mapView: MapView, private val context
     val title = call.argument<String>("title")
     val body = call.argument<String>("body")
 
+    val titleFontSize = call.argument<Double?>("titleFontSize")
+    val bodyFontSize = call.argument<Double?>("bodyFontSize")
+
     val offsetX = call.argument<Double?>("offsetX") ?: 0.0
     val offsetY = call.argument<Double?>("offsetY") ?: 0.0
 
@@ -39,8 +42,16 @@ class ViewAnnotationController(private val mapView: MapView, private val context
       val titleTextView = customView.findViewById<TextView>(R.id.annotation_title_text)
       titleTextView.text = title
 
+      if (titleFontSize != null) {
+        titleTextView.textSize = titleFontSize.toFloat()
+      }
+
       val bodyTextView = customView.findViewById<TextView>(R.id.annotation_body_text)
       bodyTextView.text = body
+
+      if (bodyFontSize != null) {
+        bodyTextView.textSize = bodyFontSize.toFloat()
+      }
 
       // Add the view annotation to the map
       viewAnnotationManager.addViewAnnotation(
@@ -73,6 +84,9 @@ class ViewAnnotationController(private val mapView: MapView, private val context
     val title = call.argument<String>("title")
     val body = call.argument<String>("body")
 
+    val titleFontSize = call.argument<Double?>("titleFontSize")
+    val bodyFontSize = call.argument<Double?>("bodyFontSize")
+
     if (viewAnnotationId != null && latitude != null && longitude != null && title != null && body != null) {
       val customView = annotationsMap[viewAnnotationId]
 
@@ -87,8 +101,16 @@ class ViewAnnotationController(private val mapView: MapView, private val context
         val titleTextView = customView.findViewById<TextView>(R.id.annotation_title_text)
         titleTextView.text = title
 
+        if (titleFontSize != null) {
+          titleTextView.textSize = titleFontSize.toFloat()
+        }
+
         val bodyTextView = customView.findViewById<TextView>(R.id.annotation_body_text)
         bodyTextView.text = body
+
+        if (bodyFontSize != null) {
+          bodyTextView.textSize = bodyFontSize.toFloat()
+        }
 
         result.success(null)
       } else {

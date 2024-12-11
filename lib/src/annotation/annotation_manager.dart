@@ -18,6 +18,8 @@ class AnnotationManager {
     required double longitude,
     required String title,
     required String body,
+    double? titleFontSize,
+    double? bodyFontSize,
     double? offsetX,
     double? offsetY,
   }) async {
@@ -27,6 +29,8 @@ class AnnotationManager {
       longitude: longitude,
       title: title,
       body: body,
+      titleFontSize: titleFontSize,
+      bodyFontSize: bodyFontSize,
       offsetX: offsetX,
       offsetY: offsetY,
     );
@@ -38,6 +42,8 @@ class AnnotationManager {
     required double longitude,
     required String title,
     required String body,
+    double? titleFontSize,
+    double? bodyFontSize,
   }) async {
     return _mapboxMapsPlatform.updateViewAnnotation(
       viewAnnotationId: viewAnnotationId,
@@ -45,6 +51,8 @@ class AnnotationManager {
       longitude: longitude,
       title: title,
       body: body,
+      titleFontSize: titleFontSize,
+      bodyFontSize: bodyFontSize,
     );
   }
 

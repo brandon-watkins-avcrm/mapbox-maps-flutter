@@ -159,6 +159,8 @@ class _MapboxMapsPlatform {
     required double longitude,
     required String title,
     required String body,
+    double? titleFontSize,
+    double? bodyFontSize,
     double? offsetX,
     double? offsetY,
   }) async {
@@ -169,6 +171,8 @@ class _MapboxMapsPlatform {
         'longitude': longitude,
         'title': title,
         'body': body,
+        'titleFontSize': titleFontSize,
+        'bodyFontSize': bodyFontSize,
         'offsetX': offsetX,
         'offsetY': offsetY,
       });
@@ -183,6 +187,8 @@ class _MapboxMapsPlatform {
     required double longitude,
     required String title,
     required String body,
+    double? titleFontSize,
+    double? bodyFontSize,
   }) async {
     try {
       return _channel.invokeMethod('view_annotation#update', <String, dynamic>{
@@ -191,6 +197,8 @@ class _MapboxMapsPlatform {
         'longitude': longitude,
         'title': title,
         'body': body,
+        'titleFontSize': titleFontSize,
+        'bodyFontSize': bodyFontSize,
       });
     } on PlatformException catch (e) {
       return new Future.error(e);
