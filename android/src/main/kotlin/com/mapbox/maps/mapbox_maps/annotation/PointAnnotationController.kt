@@ -619,6 +619,29 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     }
   }
 
+  override fun setSymbolElevationReference(
+    managerId: String,
+    symbolElevationReference: SymbolElevationReference,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    manager.symbolElevationReference = symbolElevationReference.toSymbolElevationReference()
+    callback(Result.success(Unit))
+  }
+
+  override fun getSymbolElevationReference(
+    managerId: String,
+    callback: (Result<SymbolElevationReference?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    val value = manager.symbolElevationReference
+    if (value != null) {
+      callback(Result.success(value.toFLTSymbolElevationReference()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
   override fun setSymbolPlacement(
     managerId: String,
     symbolPlacement: SymbolPlacement,
@@ -1442,29 +1465,6 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     val value = manager.iconTranslateAnchor
     if (value != null) {
       callback(Result.success(value.toFLTIconTranslateAnchor()))
-    } else {
-      callback(Result.success(null))
-    }
-  }
-
-  override fun setSymbolElevationReference(
-    managerId: String,
-    symbolElevationReference: SymbolElevationReference,
-    callback: (Result<Unit>) -> Unit
-  ) {
-    val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.symbolElevationReference = symbolElevationReference.toSymbolElevationReference()
-    callback(Result.success(Unit))
-  }
-
-  override fun getSymbolElevationReference(
-    managerId: String,
-    callback: (Result<SymbolElevationReference?>) -> Unit
-  ) {
-    val manager = delegate.getManager(managerId) as PointAnnotationManager
-    val value = manager.symbolElevationReference
-    if (value != null) {
-      callback(Result.success(value.toFLTSymbolElevationReference()))
     } else {
       callback(Result.success(null))
     }
