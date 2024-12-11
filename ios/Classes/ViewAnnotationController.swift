@@ -27,6 +27,10 @@ class ViewAnnotationController: NSObject {
         // Optional offsets with defaults
         let offsetX = args["offsetX"] as? Double ?? 0.0
         let offsetY = args["offsetY"] as? Double ?? 0.0
+        
+        // Optional font sizes with defaults
+        let titleFontSize = args["titleFontSize"] as? Double ?? 16
+        let bodyFontSize = args["bodyFontSize"] as? Double ?? 14
 
         // Check if the annotation already exists
         if annotationsMap[viewAnnotationId] != nil {
@@ -35,7 +39,7 @@ class ViewAnnotationController: NSObject {
         }
 
         // Create a container view without a background
-        let annotationView = createAnnotationView(title: title, body: body)
+        let annotationView = createAnnotationView(title: title, body: body, titleFontSize: titleFontSize, bodyFontSize: bodyFontSize)
 
         // Calculate dynamic size
         annotationView.layoutIfNeeded()
@@ -80,12 +84,23 @@ class ViewAnnotationController: NSObject {
             return
         }
 
+        // Optional font sizes with defaults
+        let titleFontSize = args["titleFontSize"] as? Double
+        let bodyFontSize = args["bodyFontSize"] as? Double
+        
         // Update title and body
-        if let titleLabel = annotationView.subviews.first(where: { $0 is UILabel && ($0 as! UILabel).font == .boldSystemFont(ofSize: 16) }) as? UILabel {
+        if let titleLabel = annotationView.subviews.first(where: { $0.accessibilityIdentifier == "titleLabel" }) as? UILabel {
             titleLabel.text = title
+            if let fontSize = titleFontSize { // Safely unwrap the optional
+                titleLabel.font = .boldSystemFont(ofSize: CGFloat(fontSize))
+            }
         }
-        if let bodyLabel = annotationView.subviews.first(where: { $0 is UILabel && ($0 as! UILabel).font == .boldSystemFont(ofSize: 14) }) as? UILabel {
+
+        if let bodyLabel = annotationView.subviews.first(where: { $0.accessibilityIdentifier == "bodyLabel" }) as? UILabel {
             bodyLabel.text = body
+            if let fontSize = bodyFontSize { // Safely unwrap the optional
+                bodyLabel.font = .systemFont(ofSize: CGFloat(fontSize))
+            }
         }
 
         // Calculate dynamic size after updates
@@ -145,14 +160,15 @@ class ViewAnnotationController: NSObject {
     }
 
     // Helper method to create the annotation view
-    private func createAnnotationView(title: String, body: String) -> UIView {
+    private func createAnnotationView(title: String, body: String, titleFontSize: Double, bodyFontSize: Double) -> UIView {
         let annotationView = UIView()
         annotationView.translatesAutoresizingMaskIntoConstraints = false
 
         // Title label
         let titleLabel = UILabel()
+        titleLabel.accessibilityIdentifier = "titleLabel"
         titleLabel.text = title
-        titleLabel.font = .boldSystemFont(ofSize: 16)
+        titleLabel.font = .boldSystemFont(ofSize: CGFloat(titleFontSize))
         titleLabel.textColor = UIColor.green
         titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -160,8 +176,9 @@ class ViewAnnotationController: NSObject {
 
         // Body label
         let bodyLabel = UILabel()
+        titleLabel.accessibilityIdentifier = "bodyLabel"
         bodyLabel.text = body
-        bodyLabel.font = .boldSystemFont(ofSize: 14)
+        bodyLabel.font = .boldSystemFont(ofSize:  CGFloat(bodyFontSize))
         bodyLabel.textColor = UIColor.green
         bodyLabel.numberOfLines = 0
         bodyLabel.translatesAutoresizingMaskIntoConstraints = false
