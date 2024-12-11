@@ -99,7 +99,7 @@ class ViewAnnotationController: NSObject {
         if let bodyLabel = annotationView.subviews.first(where: { $0.accessibilityIdentifier == "bodyLabel" }) as? UILabel {
             bodyLabel.text = body
             if let fontSize = bodyFontSize { // Safely unwrap the optional
-                bodyLabel.font = .systemFont(ofSize: CGFloat(fontSize))
+                bodyLabel.font = .boldSystemFont(ofSize: CGFloat(fontSize))
             }
         }
 
@@ -176,9 +176,9 @@ class ViewAnnotationController: NSObject {
 
         // Body label
         let bodyLabel = UILabel()
-        titleLabel.accessibilityIdentifier = "bodyLabel"
+        bodyLabel.accessibilityIdentifier = "bodyLabel"
         bodyLabel.text = body
-        bodyLabel.font = .boldSystemFont(ofSize:  CGFloat(bodyFontSize))
+        bodyLabel.font = .boldSystemFont(ofSize: CGFloat(bodyFontSize))
         bodyLabel.textColor = UIColor.green
         bodyLabel.numberOfLines = 0
         bodyLabel.translatesAutoresizingMaskIntoConstraints = false
