@@ -154,7 +154,9 @@ class MapboxMapController(
     attributionController = AttributionController(mapView)
     scaleBarController = ScaleBarController(mapView)
     compassController = CompassController(mapView)
+
     viewAnnotationController = ViewAnnotationController(mapView, context)
+
     viewportController = ViewportController(mapView.viewport, mapView.camera, context, mapboxMap)
 
     changeUserAgent(pluginVersion)

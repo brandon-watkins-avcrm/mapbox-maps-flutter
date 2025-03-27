@@ -86,6 +86,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         annotationController = AnnotationController(withMapView: mapView)
         annotationController!.setup(binaryMessenger: binaryMessenger)
 
+
         viewAnnotationController = ViewAnnotationController(withMapView: mapView)
 
         let viewportController = ViewportController(
