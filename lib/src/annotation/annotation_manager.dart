@@ -6,6 +6,64 @@ class AnnotationManager {
   AnnotationManager._({required _MapboxMapsPlatform mapboxMapsPlatform})
       : _mapboxMapsPlatform = mapboxMapsPlatform;
 
+  Future<bool> viewAnnotationExists({required String viewAnnotationId}) async {
+    return _mapboxMapsPlatform.viewAnnotationExists(
+      viewAnnotationId: viewAnnotationId,
+    );
+  }
+
+  Future<void> createViewAnnotation({
+    required String viewAnnotationId,
+    required double latitude,
+    required double longitude,
+    required String title,
+    required String body,
+    double? titleFontSize,
+    double? bodyFontSize,
+    double? offsetX,
+    double? offsetY,
+  }) async {
+    return _mapboxMapsPlatform.createViewAnnotation(
+      viewAnnotationId: viewAnnotationId,
+      latitude: latitude,
+      longitude: longitude,
+      title: title,
+      body: body,
+      titleFontSize: titleFontSize,
+      bodyFontSize: bodyFontSize,
+      offsetX: offsetX,
+      offsetY: offsetY,
+    );
+  }
+
+  Future<void> updateViewAnnotation({
+    required String viewAnnotationId,
+    required double latitude,
+    required double longitude,
+    required String title,
+    required String body,
+    double? titleFontSize,
+    double? bodyFontSize,
+  }) async {
+    return _mapboxMapsPlatform.updateViewAnnotation(
+      viewAnnotationId: viewAnnotationId,
+      latitude: latitude,
+      longitude: longitude,
+      title: title,
+      body: body,
+      titleFontSize: titleFontSize,
+      bodyFontSize: bodyFontSize,
+    );
+  }
+
+  Future<void> removeViewAnnotation({
+    required String viewAnnotationId,
+  }) async {
+    return _mapboxMapsPlatform.removeViewAnnotation(
+      viewAnnotationId: viewAnnotationId,
+    );
+  }
+
   /// Create a [PointAnnotationManager] to add/remove/update [PointAnnotation]s on the map.
   ///
   /// If [id] is specified, the string is used as an identifier for a layer and a source backing the create manager.

@@ -130,14 +130,100 @@ class _MapboxMapsPlatform {
     _channel.setMethodCallHandler(null);
   }
 
-  Future<dynamic> createAnnotationManager(String type,
-      {String? id, String? belowLayerId}) async {
+  Future<dynamic> createAnnotationManager(
+    String type, {
+    String? id,
+    String? belowLayerId,
+  }) async {
     try {
       return _channel
           .invokeMethod('annotation#create_manager', <String, dynamic>{
         'type': type,
         'id': id,
         'belowLayerId': belowLayerId,
+      });
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<bool> viewAnnotationExists({
+    required String viewAnnotationId,
+  }) async {
+    try {
+      final result = await _channel
+          .invokeMethod<bool>('view_annotation#exists', <String, dynamic>{
+        'viewAnnotationId': viewAnnotationId,
+      });
+
+      if (result == null) {
+        return Future.error('Error calling viewAnnotationExists');
+      }
+
+      return result;
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<dynamic> createViewAnnotation({
+    required String viewAnnotationId,
+    required double latitude,
+    required double longitude,
+    required String title,
+    required String body,
+    double? titleFontSize,
+    double? bodyFontSize,
+    double? offsetX,
+    double? offsetY,
+  }) async {
+    try {
+      return _channel.invokeMethod('view_annotation#create', <String, dynamic>{
+        'viewAnnotationId': viewAnnotationId,
+        'latitude': latitude,
+        'longitude': longitude,
+        'title': title,
+        'body': body,
+        'titleFontSize': titleFontSize,
+        'bodyFontSize': bodyFontSize,
+        'offsetX': offsetX,
+        'offsetY': offsetY,
+      });
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<dynamic> updateViewAnnotation({
+    required String viewAnnotationId,
+    required double latitude,
+    required double longitude,
+    required String title,
+    required String body,
+    double? titleFontSize,
+    double? bodyFontSize,
+  }) async {
+    try {
+      return _channel.invokeMethod('view_annotation#update', <String, dynamic>{
+        'viewAnnotationId': viewAnnotationId,
+        'latitude': latitude,
+        'longitude': longitude,
+        'title': title,
+        'body': body,
+        'titleFontSize': titleFontSize,
+        'bodyFontSize': bodyFontSize,
+      });
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<dynamic> removeViewAnnotation({
+    required String viewAnnotationId,
+  }) async {
+    try {
+      return _channel.invokeMethod('view_annotation#remove', <String, dynamic>{
+        'viewAnnotationId': viewAnnotationId,
       });
     } on PlatformException catch (e) {
       return new Future.error(e);

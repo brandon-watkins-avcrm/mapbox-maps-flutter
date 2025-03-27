@@ -22,6 +22,9 @@ class PointAnnotationManager extends BaseAnnotationManager {
         binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
   }
 
+  /// Current annotations of manager.
+  Future<List<PointAnnotation>> getAnnotations() => _annotationMessenger.getAnnotations(id);
+
   /// Create a new annotation with the option.
   Future<PointAnnotation> create(PointAnnotationOptions annotation) =>
       _annotationMessenger.create(id, annotation);

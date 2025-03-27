@@ -13,6 +13,7 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     final manager = await mapboxMap.annotations.createCircleAnnotationManager();
+
     var geometry = Point(coordinates: Position(1.0, 2.0));
 
     var circleAnnotationOptions = CircleAnnotationOptions(

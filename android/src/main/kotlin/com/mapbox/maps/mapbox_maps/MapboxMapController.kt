@@ -62,6 +62,7 @@ class MapboxMapController(
   private val mapInterfaceController: MapInterfaceController
   private val animationController: AnimationController
   private val annotationController: AnnotationController
+  private val viewAnnotationController: ViewAnnotationController
   private val locationComponentController: LocationComponentController
   private val gestureController: GestureController
   private val interactionsController: InteractionsController
@@ -144,6 +145,7 @@ class MapboxMapController(
     projectionController = MapProjectionController(mapboxMap)
     mapInterfaceController = MapInterfaceController(mapboxMap, mapView, context)
     animationController = AnimationController(mapboxMap, context)
+
     annotationController = AnnotationController(mapView)
     locationComponentController = LocationComponentController(mapView, context)
     gestureController = GestureController(mapView, context)
@@ -152,6 +154,9 @@ class MapboxMapController(
     attributionController = AttributionController(mapView)
     scaleBarController = ScaleBarController(mapView)
     compassController = CompassController(mapView)
+
+    viewAnnotationController = ViewAnnotationController(mapView, context)
+
     viewportController = ViewportController(mapView.viewport, mapView.camera, context, mapboxMap)
 
     changeUserAgent(pluginVersion)
@@ -224,6 +229,18 @@ class MapboxMapController(
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
     when (call.method) {
+      "view_annotation#exists" -> {
+        viewAnnotationController.viewAnnotationExists(call, result)
+      }
+      "view_annotation#create" -> {
+        viewAnnotationController.addViewAnnotation(call, result)
+      }
+      "view_annotation#update" -> {
+        viewAnnotationController.updateViewAnnotation(call, result)
+      }
+      "view_annotation#remove" -> {
+        viewAnnotationController.removeViewAnnotation(call, result)
+      }
       "annotation#create_manager" -> {
         annotationController.handleCreateManager(call, result)
       }

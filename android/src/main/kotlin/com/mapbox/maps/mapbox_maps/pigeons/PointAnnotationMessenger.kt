@@ -4,6 +4,8 @@
 
 package com.mapbox.maps.mapbox_maps.pigeons
 
+import android.net.rtp.AudioCodec
+import android.net.rtp.AudioCodec.getCodec
 import android.util.Log
 import com.mapbox.geojson.Point
 import com.mapbox.maps.mapbox_maps.mapping.turf.*
@@ -13,6 +15,9 @@ import io.flutter.plugin.common.MessageCodec
 import io.flutter.plugin.common.StandardMessageCodec
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
+import java.util.ArrayList
+import java.util.HashMap
+
 
 private fun wrapResult(result: Any?): List<Any?> {
   return listOf(result)
@@ -1119,6 +1124,7 @@ interface _PointAnnotationMessenger {
   fun update(managerId: String, annotation: PointAnnotation, callback: (Result<Unit>) -> Unit)
   fun delete(managerId: String, annotation: PointAnnotation, callback: (Result<Unit>) -> Unit)
   fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit)
+  fun getAnnotations(managerId: String, callback: (Result<List<PointAnnotation>?>) -> Unit)
   fun setIconAllowOverlap(managerId: String, iconAllowOverlap: Boolean, callback: (Result<Unit>) -> Unit)
   fun getIconAllowOverlap(managerId: String, callback: (Result<Boolean?>) -> Unit)
   fun setIconAnchor(managerId: String, iconAnchor: IconAnchor, callback: (Result<Unit>) -> Unit)
@@ -1351,6 +1357,26 @@ interface _PointAnnotationMessenger {
                 reply.reply(wrapError(error))
               } else {
                 reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getAnnotations", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getAnnotations(managerIdArg) { result: Result<List<PointAnnotation>?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
               }
             }
           }
