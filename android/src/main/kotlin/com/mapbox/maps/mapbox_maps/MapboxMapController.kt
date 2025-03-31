@@ -27,6 +27,7 @@ import com.mapbox.maps.mapbox_maps.pigeons._AnimationManager
 import com.mapbox.maps.mapbox_maps.pigeons._CameraManager
 import com.mapbox.maps.mapbox_maps.pigeons._LocationComponentSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
+import com.mapbox.maps.mapbox_maps.pigeons._PerformanceStatisticsApi
 import com.mapbox.maps.mapbox_maps.pigeons._ViewportMessenger
 import com.mapbox.maps.plugin.animation.camera
 import com.mapbox.maps.plugin.viewport.viewport
@@ -71,6 +72,7 @@ class MapboxMapController(
   private val scaleBarController: ScaleBarController
   private val compassController: CompassController
   private val viewportController: ViewportController
+  private val performanceStatisticsController: PerformanceStatisticsController
 
   private val eventHandler: MapboxEventHandler
 
@@ -158,7 +160,7 @@ class MapboxMapController(
     viewAnnotationController = ViewAnnotationController(mapView, context)
 
     viewportController = ViewportController(mapView.viewport, mapView.camera, context, mapboxMap)
-
+    performanceStatisticsController = PerformanceStatisticsController(mapboxMap, this.messenger, this.channelSuffix)
     changeUserAgent(pluginVersion)
 
     StyleManager.setUp(messenger, styleController, this.channelSuffix)
@@ -174,6 +176,7 @@ class MapboxMapController(
     ScaleBarSettingsInterface.setUp(messenger, scaleBarController, this.channelSuffix)
     CompassSettingsInterface.setUp(messenger, compassController, this.channelSuffix)
     _ViewportMessenger.setUp(messenger, viewportController, this.channelSuffix)
+    _PerformanceStatisticsApi.setUp(messenger, performanceStatisticsController, this.channelSuffix)
 
     methodChannel = MethodChannel(messenger, "plugins.flutter.io.$channelSuffix")
     methodChannel.setMethodCallHandler(this)
@@ -226,6 +229,7 @@ class MapboxMapController(
     ScaleBarSettingsInterface.setUp(messenger, null, channelSuffix)
     AttributionSettingsInterface.setUp(messenger, null, channelSuffix)
     _ViewportMessenger.setUp(messenger, null, channelSuffix)
+    _PerformanceStatisticsApi.setUp(messenger, null, channelSuffix)
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
