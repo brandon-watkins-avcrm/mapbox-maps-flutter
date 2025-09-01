@@ -12,6 +12,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
     private let mapboxMap: MapboxMap
     private let channel: FlutterMethodChannel
     private let annotationController: AnnotationController?
+    private let viewAnnotationController: ViewAnnotationController?
     private let gesturesController: GesturesController?
     private let interactionsController: InteractionsController?
     private let eventHandler: MapboxEventHandler
@@ -85,12 +86,25 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         annotationController = AnnotationController(withMapView: mapView)
         annotationController!.setup(binaryMessenger: binaryMessenger)
 
+
+        viewAnnotationController = ViewAnnotationController(withMapView: mapView)
+
         let viewportController = ViewportController(
             viewportManager: mapView.viewport,
             cameraManager: mapView.camera,
             mapboxMap: mapboxMap
         )
         _ViewportMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: viewportController, messageChannelSuffix: binaryMessenger.suffix)
+
+        let performanceStatisticsController = PerformanceStatisticsController(
+            mapboxMap: mapView.mapboxMap,
+            messenger: binaryMessenger
+        )
+        _PerformanceStatisticsApiSetup.setUp(
+            binaryMessenger: binaryMessenger.messenger,
+            api: performanceStatisticsController,
+            messageChannelSuffix: binaryMessenger.suffix
+        )
 
         super.init()
 
@@ -99,6 +113,14 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
 
     func onMethodCall(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
         switch methodCall.method {
+        case "view_annotation#exists":
+            viewAnnotationController!.viewAnnotationExists(methodCall: methodCall, result: result)
+        case "view_annotation#create":
+            viewAnnotationController!.addViewAnnotation(methodCall: methodCall, result: result)
+        case "view_annotation#update":
+            viewAnnotationController!.updateViewAnnotation(methodCall: methodCall, result: result)
+        case "view_annotation#remove":
+            viewAnnotationController!.removeViewAnnotation(methodCall: methodCall, result: result)
         case "annotation#create_manager":
             annotationController!.handleCreateManager(methodCall: methodCall, result: result)
         case "annotation#remove_manager":
@@ -173,5 +195,6 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         annotationController?.tearDown(messenger: binaryMessenger)
         _ViewportMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
+        _PerformanceStatisticsApiSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
     }
 }

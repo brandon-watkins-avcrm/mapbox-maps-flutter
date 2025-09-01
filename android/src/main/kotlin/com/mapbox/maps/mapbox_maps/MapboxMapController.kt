@@ -27,6 +27,7 @@ import com.mapbox.maps.mapbox_maps.pigeons._AnimationManager
 import com.mapbox.maps.mapbox_maps.pigeons._CameraManager
 import com.mapbox.maps.mapbox_maps.pigeons._LocationComponentSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
+import com.mapbox.maps.mapbox_maps.pigeons._PerformanceStatisticsApi
 import com.mapbox.maps.mapbox_maps.pigeons._ViewportMessenger
 import com.mapbox.maps.plugin.animation.camera
 import com.mapbox.maps.plugin.viewport.viewport
@@ -62,6 +63,7 @@ class MapboxMapController(
   private val mapInterfaceController: MapInterfaceController
   private val animationController: AnimationController
   private val annotationController: AnnotationController
+  private val viewAnnotationController: ViewAnnotationController
   private val locationComponentController: LocationComponentController
   private val gestureController: GestureController
   private val interactionsController: InteractionsController
@@ -70,6 +72,7 @@ class MapboxMapController(
   private val scaleBarController: ScaleBarController
   private val compassController: CompassController
   private val viewportController: ViewportController
+  private val performanceStatisticsController: PerformanceStatisticsController
 
   private val eventHandler: MapboxEventHandler
 
@@ -144,6 +147,7 @@ class MapboxMapController(
     projectionController = MapProjectionController(mapboxMap)
     mapInterfaceController = MapInterfaceController(mapboxMap, mapView, context)
     animationController = AnimationController(mapboxMap, context)
+
     annotationController = AnnotationController(mapView)
     locationComponentController = LocationComponentController(mapView, context)
     gestureController = GestureController(mapView, context)
@@ -152,8 +156,11 @@ class MapboxMapController(
     attributionController = AttributionController(mapView)
     scaleBarController = ScaleBarController(mapView)
     compassController = CompassController(mapView)
-    viewportController = ViewportController(mapView.viewport, mapView.camera, context, mapboxMap)
 
+    viewAnnotationController = ViewAnnotationController(mapView, context)
+
+    viewportController = ViewportController(mapView.viewport, mapView.camera, context, mapboxMap)
+    performanceStatisticsController = PerformanceStatisticsController(mapboxMap, this.messenger, this.channelSuffix)
     changeUserAgent(pluginVersion)
 
     StyleManager.setUp(messenger, styleController, this.channelSuffix)
@@ -169,6 +176,7 @@ class MapboxMapController(
     ScaleBarSettingsInterface.setUp(messenger, scaleBarController, this.channelSuffix)
     CompassSettingsInterface.setUp(messenger, compassController, this.channelSuffix)
     _ViewportMessenger.setUp(messenger, viewportController, this.channelSuffix)
+    _PerformanceStatisticsApi.setUp(messenger, performanceStatisticsController, this.channelSuffix)
 
     methodChannel = MethodChannel(messenger, "plugins.flutter.io.$channelSuffix")
     methodChannel.setMethodCallHandler(this)
@@ -194,7 +202,7 @@ class MapboxMapController(
     super.onFlutterViewDetached()
     lifecycleHelper?.dispose()
     lifecycleHelper = null
-    mapView!!.setViewTreeLifecycleOwner(null)
+    mapView?.setViewTreeLifecycleOwner(null)
   }
 
   override fun dispose() {
@@ -203,6 +211,7 @@ class MapboxMapController(
     }
     lifecycleHelper?.dispose()
     lifecycleHelper = null
+    mapView?.setViewTreeLifecycleOwner(null)
     mapView = null
     mapboxMap = null
     methodChannel.setMethodCallHandler(null)
@@ -220,10 +229,23 @@ class MapboxMapController(
     ScaleBarSettingsInterface.setUp(messenger, null, channelSuffix)
     AttributionSettingsInterface.setUp(messenger, null, channelSuffix)
     _ViewportMessenger.setUp(messenger, null, channelSuffix)
+    _PerformanceStatisticsApi.setUp(messenger, null, channelSuffix)
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
     when (call.method) {
+      "view_annotation#exists" -> {
+        viewAnnotationController.viewAnnotationExists(call, result)
+      }
+      "view_annotation#create" -> {
+        viewAnnotationController.addViewAnnotation(call, result)
+      }
+      "view_annotation#update" -> {
+        viewAnnotationController.updateViewAnnotation(call, result)
+      }
+      "view_annotation#remove" -> {
+        viewAnnotationController.removeViewAnnotation(call, result)
+      }
       "annotation#create_manager" -> {
         annotationController.handleCreateManager(call, result)
       }

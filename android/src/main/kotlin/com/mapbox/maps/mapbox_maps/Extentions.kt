@@ -31,6 +31,19 @@ import java.io.ByteArrayOutputStream
 
 // FLT to Android
 
+fun PerformanceStatisticsOptions.toPerformanceStatisticsOptions(): com.mapbox.maps.PerformanceStatisticsOptions {
+  return com.mapbox.maps.PerformanceStatisticsOptions.Builder()
+    .samplerOptions(samplerOptions.map { it.toPerformanceSamplerOptions() })
+    .samplingDurationMillis(samplingDurationMillis).build()
+}
+
+fun PerformanceSamplerOptions.toPerformanceSamplerOptions(): com.mapbox.maps.PerformanceSamplerOptions {
+  return when (this) {
+    PerformanceSamplerOptions.CUMULATIVE -> com.mapbox.maps.PerformanceSamplerOptions.CUMULATIVE_RENDERING_STATS
+    PerformanceSamplerOptions.PER_FRAME -> com.mapbox.maps.PerformanceSamplerOptions.PER_FRAME_RENDERING_STATS
+  }
+}
+
 fun _MapWidgetDebugOptions.toMapViewDebugOptions(): MapViewDebugOptions {
   return when (this) {
     _MapWidgetDebugOptions.TILE_BORDERS -> MapViewDebugOptions.TILE_BORDERS
@@ -431,33 +444,33 @@ fun Geometry.toMap(): Map<String?, Any?> {
   return when (this) {
     is Point -> mapOf(
       "type" to "Point",
-      "coordinates" to listOf(this.latitude(), this.longitude())
+      "coordinates" to listOf(this.longitude(), this.latitude())
     )
     is LineString -> mapOf(
       "type" to "LineString",
-      "coordinates" to this.coordinates().map { listOf(it.latitude(), it.longitude()) }
+      "coordinates" to this.coordinates().map { listOf(it.longitude(), it.latitude()) }
     )
     is Polygon -> mapOf(
       "type" to "Polygon",
       "coordinates" to this.coordinates().map { ring ->
-        ring.map { listOf(it.latitude(), it.longitude()) }
+        ring.map { listOf(it.longitude(), it.latitude()) }
       }
     )
     is MultiPoint -> mapOf(
       "type" to "MultiPoint",
-      "coordinates" to this.coordinates().map { listOf(it.latitude(), it.longitude()) }
+      "coordinates" to this.coordinates().map { listOf(it.longitude(), it.latitude()) }
     )
     is MultiLineString -> mapOf(
       "type" to "MultiLineString",
       "coordinates" to this.coordinates().map { line ->
-        line.map { listOf(it.latitude(), it.longitude()) }
+        line.map { listOf(it.longitude(), it.latitude()) }
       }
     )
     is MultiPolygon -> mapOf(
       "type" to "MultiPolygon",
       "coordinates" to this.coordinates().map { polygon ->
         polygon.map { ring ->
-          ring.map { listOf(it.latitude(), it.longitude()) }
+          ring.map { listOf(it.longitude(), it.latitude()) }
         }
       }
     )
@@ -504,6 +517,43 @@ fun Number.toDevicePixels(context: Context): Float {
 }
 
 // Android to FLT
+
+fun com.mapbox.maps.PerformanceStatistics.toPerformanceStatistics(): PerformanceStatistics {
+  return PerformanceStatistics(
+    collectionDurationMillis = collectionDurationMillis,
+    mapRenderDurationStatistics = mapRenderDurationStatistics.toDurationStatistics(),
+    cumulativeStatistics = cumulativeStatistics?.toCumulativeRenderingStatistics(),
+    perFrameStatistics = perFrameStatistics?.toPerFrameRenderingStatistics()
+  )
+}
+
+fun com.mapbox.maps.DurationStatistics.toDurationStatistics(): DurationStatistics {
+  return DurationStatistics(maxMillis = maxMillis, medianMillis = medianMillis)
+}
+
+fun com.mapbox.maps.CumulativeRenderingStatistics.toCumulativeRenderingStatistics(): CumulativeRenderingStatistics {
+  return CumulativeRenderingStatistics(
+    drawCalls = drawCalls,
+    textureBytes = textureBytes,
+    vertexBytes = vertexBytes,
+    graphicsPrograms = graphicsPrograms,
+    graphicsProgramsCreationTimeMillis = graphicsProgramsCreationTimeMillis,
+    fboSwitchCount = fboSwitchCount
+  )
+}
+
+fun com.mapbox.maps.PerFrameRenderingStatistics.toPerFrameRenderingStatistics(): PerFrameRenderingStatistics {
+  return PerFrameRenderingStatistics(
+    topRenderGroups = topRenderGroups.map { it.toGroupPerformanceStatistics() },
+    topRenderLayers = topRenderLayers.map { it.toGroupPerformanceStatistics() },
+    shadowMapDurationStatistics = shadowMapDurationStatistics.toDurationStatistics(),
+    uploadDurationStatistics = uploadDurationStatistics.toDurationStatistics()
+  )
+}
+
+fun com.mapbox.maps.GroupPerformanceStatistics.toGroupPerformanceStatistics(): GroupPerformanceStatistics {
+  return GroupPerformanceStatistics(durationMillis = durationMillis, name = name)
+}
 
 fun MapViewDebugOptions.toFLTDebugOptions(): _MapWidgetDebugOptions? {
   return when (this) {
