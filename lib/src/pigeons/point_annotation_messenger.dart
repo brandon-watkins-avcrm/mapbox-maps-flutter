@@ -1233,6 +1233,33 @@ class _PointAnnotationMessenger {
     }
   }
 
+  Future<List<PointAnnotation>> getAnnotations(String arg_managerId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getAnnotations';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+
+    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
+        .send(<Object?>[arg_managerId]) as List<Object?>?;
+
+    if (pigeonVar_replyList == null || pigeonVar_replyList[0] == null) {
+      return <PointAnnotation>[];
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as List<Object?>?)!
+          .cast<PointAnnotation>();
+    }
+  }
+
   Future<void> setIconAllowOverlap(
       String managerId, bool iconAllowOverlap) async {
     final String pigeonVar_channelName =
