@@ -1806,6 +1806,9 @@ fun PointAnnotationOptions.toPointAnnotationOptions(): com.mapbox.maps.plugin.an
   this.image?.let {
     options.withIconImage(BitmapFactory.decodeByteArray(it, 0, it.size))
   }
+  this.isDraggable?.let {
+    options.withDraggable(it)
+  }
   this.iconAnchor?.let {
     options.withIconAnchor(it.toIconAnchor())
   }

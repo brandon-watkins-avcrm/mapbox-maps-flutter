@@ -116,6 +116,13 @@ fun ModelScaleMode.toModelScaleMode(): com.mapbox.maps.plugin.ModelScaleMode {
   }
 }
 
+fun ModelElevationReference.toModelElevationReference(): com.mapbox.maps.plugin.ModelElevationReference {
+  return when (this) {
+    ModelElevationReference.GROUND -> com.mapbox.maps.plugin.ModelElevationReference.GROUND
+    ModelElevationReference.SEA -> com.mapbox.maps.plugin.ModelElevationReference.SEA
+  }
+}
+
 fun TileStoreUsageMode.toTileStoreUsageMode(): com.mapbox.maps.TileStoreUsageMode {
   return when (this) {
     TileStoreUsageMode.DISABLED -> com.mapbox.maps.TileStoreUsageMode.DISABLED
@@ -597,8 +604,16 @@ fun com.mapbox.maps.plugin.ModelScaleMode.toFLTModelScaleMode(): ModelScaleMode 
     else -> { throw java.lang.RuntimeException("Scale mode not supported: $this") }
   }
 }
+fun com.mapbox.maps.plugin.ModelElevationReference.toFLTModelElevationReference(): ModelElevationReference {
+  return when (this) {
+    com.mapbox.maps.plugin.ModelElevationReference.GROUND -> ModelElevationReference.GROUND
+    com.mapbox.maps.plugin.ModelElevationReference.SEA -> ModelElevationReference.SEA
+    else -> { throw java.lang.RuntimeException("Model Elevation Reference not supported: $this") }
+  }
+}
+
 fun com.mapbox.maps.StylePropertyValue.toFLTStylePropertyValue(): StylePropertyValue {
-  return StylePropertyValue(value.toJson(), StylePropertyValueKind.values()[kind.ordinal])
+  return StylePropertyValue(value.contents, StylePropertyValueKind.values()[kind.ordinal])
 }
 
 fun ProjectionName.toFLTProjectionName(): StyleProjectionName {
@@ -973,6 +988,11 @@ fun Any.toValue(): Value {
     val valueArray = this.map { it?.toValue() }
     Value(valueArray)
   } else if (this is List<*>) {
+    // Any List starting with a string is potentially a Mapbox expression.
+    // Convert it to JSON string.
+    if (this.isNotEmpty() && this[0] is String) {
+      return Gson().toJson(this).toValue()
+    }
     val valueArray = this.map { it?.toValue() }
     Value(valueArray)
   } else if (this is HashMap<*, *>) {

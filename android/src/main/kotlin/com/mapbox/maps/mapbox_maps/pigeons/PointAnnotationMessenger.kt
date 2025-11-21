@@ -4,8 +4,6 @@
 
 package com.mapbox.maps.mapbox_maps.pigeons
 
-import android.net.rtp.AudioCodec
-import android.net.rtp.AudioCodec.getCodec
 import android.util.Log
 import com.mapbox.geojson.Point
 import com.mapbox.maps.mapbox_maps.mapping.turf.*
@@ -15,9 +13,6 @@ import io.flutter.plugin.common.MessageCodec
 import io.flutter.plugin.common.StandardMessageCodec
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
-import java.util.ArrayList
-import java.util.HashMap
-
 
 private fun wrapResult(result: Any?): List<Any?> {
   return listOf(result)
@@ -37,10 +32,6 @@ private fun wrapError(exception: Throwable): List<Any?> {
       "Cause: " + exception.cause + ", Stacktrace: " + Log.getStackTraceString(exception)
     )
   }
-}
-
-private fun createConnectionError(channelName: String): FlutterError {
-  return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
 }
 private fun deepEqualsPointAnnotationMessenger(a: Any?, b: Any?): Boolean {
   if (a is ByteArray && b is ByteArray) {
@@ -526,8 +517,9 @@ data class PointAnnotation(
    */
   val iconHaloWidth: Double? = null,
   /**
-   * Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+   * Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
    * Default value: 0. Value range: [0, 1]
+   * Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
    */
   val iconImageCrossFade: Double? = null,
   /**
@@ -580,7 +572,9 @@ data class PointAnnotation(
    * The opacity at which the text will be drawn.
    * Default value: 1. Value range: [0, 1]
    */
-  val textOpacity: Double? = null
+  val textOpacity: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PointAnnotation {
@@ -622,7 +616,8 @@ data class PointAnnotation(
       val textHaloWidth = pigeonVar_list[35] as Double?
       val textOcclusionOpacity = pigeonVar_list[36] as Double?
       val textOpacity = pigeonVar_list[37] as Double?
-      return PointAnnotation(id, geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity)
+      val isDraggable = pigeonVar_list[38] as Boolean?
+      return PointAnnotation(id, geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -665,6 +660,7 @@ data class PointAnnotation(
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -711,7 +707,8 @@ data class PointAnnotation(
       textHaloColor == other.textHaloColor &&
       textHaloWidth == other.textHaloWidth &&
       textOcclusionOpacity == other.textOcclusionOpacity &&
-      textOpacity == other.textOpacity
+      textOpacity == other.textOpacity &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -841,8 +838,9 @@ data class PointAnnotationOptions(
    */
   val iconHaloWidth: Double? = null,
   /**
-   * Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+   * Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
    * Default value: 0. Value range: [0, 1]
+   * Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
    */
   val iconImageCrossFade: Double? = null,
   /**
@@ -895,7 +893,9 @@ data class PointAnnotationOptions(
    * The opacity at which the text will be drawn.
    * Default value: 1. Value range: [0, 1]
    */
-  val textOpacity: Double? = null
+  val textOpacity: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PointAnnotationOptions {
@@ -936,7 +936,8 @@ data class PointAnnotationOptions(
       val textHaloWidth = pigeonVar_list[34] as Double?
       val textOcclusionOpacity = pigeonVar_list[35] as Double?
       val textOpacity = pigeonVar_list[36] as Double?
-      return PointAnnotationOptions(geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity)
+      val isDraggable = pigeonVar_list[37] as Boolean?
+      return PointAnnotationOptions(geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -978,6 +979,7 @@ data class PointAnnotationOptions(
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -1023,7 +1025,8 @@ data class PointAnnotationOptions(
       textHaloColor == other.textHaloColor &&
       textHaloWidth == other.textHaloWidth &&
       textOcclusionOpacity == other.textOcclusionOpacity &&
-      textOpacity == other.textOpacity
+      textOpacity == other.textOpacity &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -1212,31 +1215,6 @@ private open class PointAnnotationMessengerPigeonCodec : StandardMessageCodec() 
   }
 }
 
-/** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
-class OnPointAnnotationClickListener(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
-  companion object {
-    /** The codec used by OnPointAnnotationClickListener. */
-    val codec: MessageCodec<Any?> by lazy {
-      PointAnnotationMessengerPigeonCodec()
-    }
-  }
-  fun onPointAnnotationClick(annotationArg: PointAnnotation, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.OnPointAnnotationClickListener.onPointAnnotationClick$separatedMessageChannelSuffix"
-    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(annotationArg)) {
-      if (it is List<*>) {
-        if (it.size > 1) {
-          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
-        } else {
-          callback(Result.success(Unit))
-        }
-      } else {
-        callback(Result.failure(createConnectionError(channelName)))
-      }
-    }
-  }
-}
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface _PointAnnotationMessenger {
   fun create(managerId: String, annotationOption: PointAnnotationOptions, callback: (Result<PointAnnotation>) -> Unit)
@@ -1244,7 +1222,6 @@ interface _PointAnnotationMessenger {
   fun update(managerId: String, annotation: PointAnnotation, callback: (Result<Unit>) -> Unit)
   fun delete(managerId: String, annotation: PointAnnotation, callback: (Result<Unit>) -> Unit)
   fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit)
-  fun getAnnotations(managerId: String, callback: (Result<List<PointAnnotation>?>) -> Unit)
   fun setIconAllowOverlap(managerId: String, iconAllowOverlap: Boolean, callback: (Result<Unit>) -> Unit)
   fun getIconAllowOverlap(managerId: String, callback: (Result<Boolean?>) -> Unit)
   fun setIconAnchor(managerId: String, iconAnchor: IconAnchor, callback: (Result<Unit>) -> Unit)
@@ -1477,26 +1454,6 @@ interface _PointAnnotationMessenger {
                 reply.reply(wrapError(error))
               } else {
                 reply.reply(wrapResult(null))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getAnnotations", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val managerIdArg = args[0] as String
-            api.getAnnotations(managerIdArg) { result: Result<List<PointAnnotation>?> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                val data = result.getOrNull()
-                reply.reply(wrapResult(data))
               }
             }
           }
