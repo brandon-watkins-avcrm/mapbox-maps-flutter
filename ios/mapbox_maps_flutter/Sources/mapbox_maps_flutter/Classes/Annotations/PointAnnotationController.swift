@@ -82,24 +82,11 @@ final class PointAnnotationController: BaseAnnotationMessenger<PointAnnotationMa
 
     func getAnnotations(managerId: String, completion: @escaping (Result<[PointAnnotation], Error>) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
-                let annotations = manager.annotations.map { annotation in
-                    annotation.toFLTPointAnnotation()
-                }
-                completion(.success(annotations))
-            } else {
-                completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
-            }
+            let annotations = try get(\.annotations, managerId: managerId)
+            let flutterAnnotations = annotations.map { $0.toFLTPointAnnotation() }
+            completion(.success(flutterAnnotations))
         } catch {
             completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
-        }
-    }
-
-    private func getManager(id: String) throws -> AnnotationManager {
-        if let manager = try delegate?.getManager(managerId: id) as? AnnotationManager {
-            return manager
-        } else {
-            throw PointAnnotationControllerError.managerNotFound(id)
         }
     }
 
