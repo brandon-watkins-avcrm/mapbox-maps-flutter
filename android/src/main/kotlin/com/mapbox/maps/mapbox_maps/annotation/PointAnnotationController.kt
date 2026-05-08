@@ -48,7 +48,7 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
       val annotations = manager.annotations.map { it.toFLTPointAnnotation() }.toMutableList()
 
       callback(Result.success(annotations))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -68,7 +68,7 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
         managerCreateAnnotationMap[managerId]!!.add(annotation.id)
       }
       callback(Result.success(annotation.toFLTPointAnnotation()))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -93,7 +93,7 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
         )
       }
       callback(Result.success(annotations.map { it.toFLTPointAnnotation() }.toMutableList()))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -115,7 +115,7 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
       manager.update(originalAnnotation)
       annotationMap[annotation.id] = originalAnnotation
       callback(Result.success(Unit))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -139,7 +139,7 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
       annotationMap.remove(annotation.id)
       managerCreateAnnotationMap[managerId]?.remove(annotation.id)
       callback(Result.success(Unit))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -153,7 +153,7 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
       }
       manager.deleteAll()
       callback(Result.success(Unit))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }

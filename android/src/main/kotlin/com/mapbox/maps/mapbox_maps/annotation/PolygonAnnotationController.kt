@@ -27,7 +27,7 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
         managerCreateAnnotationMap[managerId]!!.add(annotation.id)
       }
       callback(Result.success(annotation.toFLTPolygonAnnotation()))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -52,7 +52,7 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
         )
       }
       callback(Result.success(annotations.map { it.toFLTPolygonAnnotation() }.toMutableList()))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -74,7 +74,7 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
       manager.update(originalAnnotation)
       annotationMap[annotation.id] = originalAnnotation
       callback(Result.success(Unit))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -98,7 +98,7 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
       annotationMap.remove(annotation.id)
       managerCreateAnnotationMap[managerId]?.remove(annotation.id)
       callback(Result.success(Unit))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -112,7 +112,7 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
       }
       manager.deleteAll()
       callback(Result.success(Unit))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }

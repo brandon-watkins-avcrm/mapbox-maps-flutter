@@ -34,7 +34,7 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
         managerCreateAnnotationMap[managerId]!!.add(annotation.id)
       }
       callback(Result.success(annotation.toFLTPolylineAnnotation()))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -59,7 +59,7 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
         )
       }
       callback(Result.success(annotations.map { it.toFLTPolylineAnnotation() }.toMutableList()))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -81,7 +81,7 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
       manager.update(originalAnnotation)
       annotationMap[annotation.id] = originalAnnotation
       callback(Result.success(Unit))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -105,7 +105,7 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
       annotationMap.remove(annotation.id)
       managerCreateAnnotationMap[managerId]?.remove(annotation.id)
       callback(Result.success(Unit))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -119,7 +119,7 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
       }
       manager.deleteAll()
       callback(Result.success(Unit))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }

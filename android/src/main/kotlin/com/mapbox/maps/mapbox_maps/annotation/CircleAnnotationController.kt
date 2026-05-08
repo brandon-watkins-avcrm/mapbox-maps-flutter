@@ -31,7 +31,7 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
         managerCreateAnnotationMap[managerId]!!.add(annotation.id)
       }
       callback(Result.success(annotation.toFLTCircleAnnotation()))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -56,7 +56,7 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
         )
       }
       callback(Result.success(annotations.map { it.toFLTCircleAnnotation() }.toMutableList()))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -78,7 +78,7 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
       manager.update(originalAnnotation)
       annotationMap[annotation.id] = originalAnnotation
       callback(Result.success(Unit))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -102,7 +102,7 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
       annotationMap.remove(annotation.id)
       managerCreateAnnotationMap[managerId]?.remove(annotation.id)
       callback(Result.success(Unit))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
@@ -116,7 +116,7 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
       }
       manager.deleteAll()
       callback(Result.success(Unit))
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       callback(Result.failure(e))
     }
   }
